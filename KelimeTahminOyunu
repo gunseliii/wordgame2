@@ -1,0 +1,64 @@
+import random
+
+class KelimeTahminOyunu:
+    def _init_(self, kelimeler, max_hak=6):
+        self.kelimeler = kelimeler
+        self.max_hak = max_hak
+        self.sifirla()
+
+    def sifirla(self):
+        self.kelime = random.choice(self.kelimeler).lower()
+        self.tahmin_edilenler = set()
+        self.kalan_hak = self.max_hak
+        self.kelime_durumu = ['-' for _ in self.kelime]
+
+    def harf_tahmini(self, harf):
+        harf = harf.lower()
+        if harf in self.tahmin_edilenler:
+            print("Bu harfi zaten denedin.")
+            return
+
+        self.tahmin_edilenler.add(harf)
+
+        if harf in self.kelime:
+            for i, h in enumerate(self.kelime):
+                if h == harf:
+                    self.kelime_durumu[i] = harf
+            print("Doğru tahmin! 👏")
+        else:
+            self.kalan_hak -= 1
+            print("Yanlış tahmin. ❌")
+
+    def oyunu_kazandi_mi(self):
+        return '-' not in self.kelime_durumu
+
+    def oyunu_kaybetti_mi(self):
+        return self.kalan_hak <= 0
+
+    def durumu_goster(self):
+        print("\nKelime: " + ' '.join(self.kelime_durumu))
+        print(f"Kalan hak: {self.kalan_hak}")
+        print(f"Denediğin harfler: {', '.join(sorted(self.tahmin_edilenler))}\n")
+
+    def oyunu_oyna(self):
+        print("🎮 Kelime Tahmin Oyununa Hoş Geldin!\n")
+        while not self.oyunu_kazandi_mi() and not self.oyunu_kaybetti_mi():
+            self.durumu_goster()
+            harf = input("Bir harf tahmin et: ")
+            if len(harf) != 1 or not harf.isalpha():
+                print("⚠️ Lütfen sadece bir harf gir.\n")
+                continue
+            self.harf_tahmini(harf)
+
+        self.durumu_goster()
+        if self.oyunu_kazandi_mi():
+            print("🎉 Tebrikler! Kelimeyi buldun:", self.kelime)
+        else:
+            print("💀 Maalesef kaybettin. Kelime:", self.kelime)
+
+
+# Oyun çalıştırma
+if __name__ == "_main_":
+    kelime_listesi = ["elma", "kitap", "python", "bilgisayar", "kalem"]
+    oyun = KelimeTahminOyunu(kelime_listesi)
+    oyun.oyunu_oyna()
