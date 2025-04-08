@@ -1,4 +1,4 @@
- 🎮 Word Guessing Game
+🎮 Word Guessing Game
 
 This project was developed as part of the Advanced Python Programming course. The goal is to create a fun command-line game where the player tries to guess a randomly chosen word.
 
